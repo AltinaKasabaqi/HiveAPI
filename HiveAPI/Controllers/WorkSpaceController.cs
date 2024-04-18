@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HiveAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/workspace")]
     public class WorkSpacesController : ControllerBase
     {
 
