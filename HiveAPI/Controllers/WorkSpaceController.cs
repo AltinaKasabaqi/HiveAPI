@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HiveAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/workspace")]
     public class WorkSpacesController : ControllerBase
     {
 
@@ -19,7 +19,9 @@ namespace HiveAPI.Controllers
         [HttpGet(Name = "GetWorkSpaces")]
         public async Task<IActionResult> GetWorkSpaces()
         {
-            var WorkSpaces = await _context.WorkSpaces.ToListAsync();
+            var WorkSpaces = await _context.WorkSpaces
+                                                .Include(u => u.User)
+                                                .ToListAsync();
 
             return Ok(WorkSpaces);
         }
@@ -27,7 +29,9 @@ namespace HiveAPI.Controllers
         [HttpGet("{id}", Name = "GetWorkSpaceById")]
         public async Task<IActionResult> GetWorkSpaceById(int id)
         {
-            var WorkSpace = await _context.WorkSpaces.FirstOrDefaultAsync(x => x.WId == id);
+            var WorkSpace = await _context.WorkSpaces
+                                                .Include(u => u.User)
+                                                .FirstOrDefaultAsync(x => x.WId == id);
 
             if (WorkSpace == null)
             {
@@ -35,6 +39,22 @@ namespace HiveAPI.Controllers
             }
 
             return Ok(WorkSpace);
+        }
+
+        [HttpGet("user/{userId}", Name = "GetWorkSpacesByUserId")]
+        public async Task<IActionResult> GetWorkSpacesByUserId(int userId)
+        {
+            var workSpaces = await _context.WorkSpaces
+                                            .Include(w => w.User)
+                                            .Where(w => w.UserId == userId)
+                                            .ToListAsync();
+
+            if (workSpaces == null || workSpaces.Count == 0)
+            {
+                return NotFound("No workspaces found for the specified user ID.");
+            }
+
+            return Ok(workSpaces);
         }
 
         [HttpPost(Name = "AddWorkSpace")]
