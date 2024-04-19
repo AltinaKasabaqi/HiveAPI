@@ -21,6 +21,17 @@ namespace HiveAPI.Controllers
         {
             var WorkSpaces = await _context.WorkSpaces
                                                 .Include(u => u.User)
+                                                .Select(ws => new {
+                                                    ws.WId,
+                                                    ws.WorkspaceName,
+                                                    ws.WorkspaceDescription,
+                                                    User = new
+                                                    {
+                                                        ws.User.UserId,
+                                                        ws.User.name,
+                                                        ws.User.email
+                                                    }
+                                                })
                                                 .ToListAsync();
 
             return Ok(WorkSpaces);
@@ -31,6 +42,17 @@ namespace HiveAPI.Controllers
         {
             var WorkSpace = await _context.WorkSpaces
                                                 .Include(u => u.User)
+                                                .Select(ws => new {
+                                                    ws.WId,
+                                                    ws.WorkspaceName,
+                                                    ws.WorkspaceDescription,
+                                                    User = new
+                                                    {
+                                                        ws.User.UserId,
+                                                        ws.User.name,
+                                                        ws.User.email
+                                                    }
+                                                })
                                                 .FirstOrDefaultAsync(x => x.WId == id);
 
             if (WorkSpace == null)
@@ -47,6 +69,17 @@ namespace HiveAPI.Controllers
             var workSpaces = await _context.WorkSpaces
                                             .Include(w => w.User)
                                             .Where(w => w.UserId == userId)
+                                            .Select(ws => new {
+                                                ws.WId,
+                                                ws.WorkspaceName,
+                                                ws.WorkspaceDescription,
+                                                User = new
+                                                {
+                                                    ws.User.UserId,
+                                                    ws.User.name,
+                                                    ws.User.email
+                                                }
+                                            })
                                             .ToListAsync();
 
             if (workSpaces == null || workSpaces.Count == 0)
