@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BCrypt.Net;
+using HiveAPI.Services;
+
 
 namespace HiveAPI.Controllers
 {
@@ -30,7 +32,7 @@ namespace HiveAPI.Controllers
 
             if (_context.Users.Any(u => u.email == user.email))
             {
-                return Conflict("Ky mejl është tashmë i regjistruar.");
+                return Conflict("Ky email është tashmë i regjistruar.");
             }
 
             var hashedPass = BCrypt.Net.BCrypt.HashPassword(user.password);
@@ -43,5 +45,34 @@ namespace HiveAPI.Controllers
             // Kthejë një përgjigje të suksesshme
             return Ok();
         }
+
+        [HttpPost("/login")]
+        public IActionResult Login([FromBody] UserLogin Request)
+        {
+            var user = _context.Users.FirstOrDefault(user => user.email == Request.Email);
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(Request.Password, user.password))
+            {
+                return Unauthorized("Email ose fjalkalimi eshte gabim");
+            }
+
+           
+
+            var token = TokenService.GenerateToken(user.UserId);
+
+            // Kthe një objekt anonim si përgjigje
+            return Ok(new
+            {
+                IsAuthenticated = true,
+                Token = token
+            });
+        }
+
+        public class UserLogin
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
+
     }
 }
