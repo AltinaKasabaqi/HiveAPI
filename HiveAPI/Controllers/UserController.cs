@@ -21,6 +21,57 @@ namespace HiveAPI.Controllers
            
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, [FromBody] User user)
+        {
+            var existingUser = _context.Users.Find(id);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.name = user.name ?? existingUser.name;
+            existingUser.email = user.email ?? existingUser.email;
+            var hashedPass = BCrypt.Net.BCrypt.HashPassword(user.password);
+
+            user.password = hashedPass;
+
+            _context.Users.Update(existingUser);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUser(int id)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] User user)
         {
