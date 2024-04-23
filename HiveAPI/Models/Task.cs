@@ -14,7 +14,7 @@
         public ICollection<Collaborator> Collaborators { get; set; }
 
         // Lidhja me Workspace
-        public int WorkSpaceId { get; set; }
-        public WorkSpace WorkSpace { get; set; }
+        public int ListId { get; set; }
+        public List list{ get; set; }
     }
 }
