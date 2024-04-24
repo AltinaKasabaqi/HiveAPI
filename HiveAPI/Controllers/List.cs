@@ -61,9 +61,44 @@ namespace HiveAPI.Controllers
             return Ok(list);
         }
 
+        [HttpGet("workspace/{wId}", Name = "GetListsByWorkspaceId")]
+        public async Task<IActionResult> GetListsByWorkspaceId(int wId)
+        {
+            var list = await _context.Set<List>()
+                                            .Include(l => l.WorkSpace)
+                                            .Where(l => l.WorkSpaceId == wId)
+                                            .Select(ls => new {
+                                                ls.ListId,
+                                                ls.ListName,
+                                                WorkSpace = new
+                                                {
+                                                    ls.WorkSpace.WId,
+                                                    ls.WorkSpace.WorkspaceName,
+                                                }
+                                            })
+                                            .ToListAsync();
+
+            if (list == null || list.Count == 0)
+            {
+                return NotFound("No lists found for the specified workspace ID.");
+            }
+
+            return Ok(list);
+        }
+
         [HttpPost(Name = "CreateList")]
         public async Task<IActionResult> CreateList([FromBody] List list)
         {
+
+            var workspace = await _context.WorkSpaces.FirstOrDefaultAsync(ws => ws.WId == list.WorkSpaceId);
+
+            if (workspace == null)
+            {
+                return BadRequest("Workspace not found");
+            }
+
+            list.WorkSpace = workspace;
+
             if (list == null)
             {
                 return BadRequest("List object is null");
