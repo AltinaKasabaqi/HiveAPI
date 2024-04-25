@@ -22,6 +22,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult UpdateUser(int id, [FromBody] User user)
         {
             var existingUser = _context.Users.Find(id);
@@ -44,6 +45,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        
         public IActionResult GetUser(int id)
         {
             var user = _context.Users.Find(id);
@@ -57,6 +59,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+       
         public IActionResult DeleteUser(int id)
         {
             var user = _context.Users.Find(id);
@@ -73,6 +76,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPost]
+
         public IActionResult Create([FromBody] User user)
         {
 

@@ -1,4 +1,5 @@
 ﻿using HiveAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ namespace HiveAPI.Controllers
 {
     [ApiController]
     [Route("/workspace")]
+   
     public class WorkSpacesController : ControllerBase
     {
 
@@ -38,6 +40,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetWorkSpaceById")]
+        [Authorize]
         public async Task<IActionResult> GetWorkSpaceById(int id)
         {
             var WorkSpace = await _context.WorkSpaces
@@ -64,6 +67,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet("user/{userId}", Name = "GetWorkSpacesByUserId")]
+        [Authorize]
         public async Task<IActionResult> GetWorkSpacesByUserId(int userId)
         {
             var workSpaces = await _context.WorkSpaces
@@ -91,6 +95,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPost(Name = "AddWorkSpace")]
+        [Authorize]
         public async Task<IActionResult> AddWorkSpace(WorkSpace workSpace)
         {
 
@@ -111,6 +116,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdateWorkSpace")]
+        [Authorize]
         public async Task<IActionResult> UpdateWorkSpace(int id, WorkSpace workSpace)
         {
             var WorkSpace = await _context.WorkSpaces.FirstOrDefaultAsync(x => x.WId == id);
@@ -135,6 +141,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteWorkSpace")]
+        [Authorize]
         public async Task<IActionResult> DeleteWorkSpace(int id)
         {
             var WorkSpace = await _context.WorkSpaces.FirstOrDefaultAsync(x => x.WId == id);
