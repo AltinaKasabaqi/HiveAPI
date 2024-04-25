@@ -18,7 +18,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet(Name = "GetLists")]
-
+        [Authorize]
         public async Task<IActionResult> GetLists()
 
         {
