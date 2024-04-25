@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HiveAPI.Controllers
 {
@@ -17,7 +18,9 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet(Name = "GetLists")]
+
         public async Task<IActionResult> GetLists()
+
         {
             var lists = await _context.Set<List>()
                                       .Include(l => l.WorkSpace)
@@ -37,6 +40,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetListById")]
+        [Authorize]
         public async Task<IActionResult> GetListById(int id)
         {
             var list = await _context.Set<List>()
@@ -62,6 +66,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet("workspace/{wId}", Name = "GetListsByWorkspaceId")]
+        [Authorize]
         public async Task<IActionResult> GetListsByWorkspaceId(int wId)
         {
             var list = await _context.Set<List>()
@@ -87,6 +92,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPost(Name = "CreateList")]
+        [Authorize]
         public async Task<IActionResult> CreateList([FromBody] List list)
         {
 
@@ -111,6 +117,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdateList")]
+        [Authorize]
         public async Task<IActionResult> UpdateList(int id, [FromBody] List list)
         {
             if (list == null || list.ListId != id)
@@ -134,6 +141,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteList")]
+        [Authorize]
         public async Task<IActionResult> DeleteList(int id)
         {
             var list = await _context.Set<List>().FindAsync(id);
