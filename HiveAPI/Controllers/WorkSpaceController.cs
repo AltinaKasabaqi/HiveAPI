@@ -19,6 +19,7 @@ namespace HiveAPI.Controllers
         }
 
         [HttpGet(Name = "GetWorkSpaces")]
+        
         public async Task<IActionResult> GetWorkSpaces()
         {
             var WorkSpaces = await _context.WorkSpaces
