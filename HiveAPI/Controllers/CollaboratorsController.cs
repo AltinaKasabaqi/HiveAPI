@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HiveAPI.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HiveAPI.Controllers
 {
@@ -32,7 +34,19 @@ namespace HiveAPI.Controllers
             return Ok(collaborator);
         }
 
-        
+        [HttpGet("by-email")]
+        public async Task<IActionResult> GetCollaboratorsByEmail(string email)
+        {
+            var collaborators = await _context.Collaborators
+                .Where(c => c.UserEmail == email)
+                .ToListAsync();
+
+            if (collaborators.Count == 0)
+                return NotFound();
+
+            return Ok(collaborators);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCollaborator(Collaborator collaborator)
         {
@@ -55,6 +69,7 @@ namespace HiveAPI.Controllers
             return NoContent();
         }
 
+    
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCollaborator(int id)
         {
