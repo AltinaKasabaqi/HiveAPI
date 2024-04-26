@@ -36,7 +36,7 @@ namespace HiveAPI.Controllers
             existingUser.email = user.email ?? existingUser.email;
             var hashedPass = BCrypt.Net.BCrypt.HashPassword(user.password);
 
-            user.password = hashedPass;
+            existingUser.password = hashedPass;
 
             _context.Users.Update(existingUser);
             _context.SaveChanges();
