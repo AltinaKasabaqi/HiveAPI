@@ -1,26 +1,12 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      SA_PASSWORD: "Your_password123"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
-    networks:
-      - hive-network
-
-  hiveapi:
+  hive-api:
+    image: hive-api
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
-    depends_on:
-      - sqlserver
-    networks:
-      - hive-network
-
-networks:
-  hive-network:
+    environment:
+      - ASPNETCORE_URLS=http://+:80
