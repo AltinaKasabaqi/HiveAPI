@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HiveAPI.Controllers
 {
     [ApiController]
     [Route("/workspace")]
-   
     public class WorkSpacesController : ControllerBase
     {
-
         private readonly APIDbContext _context;
 
         public WorkSpacesController(APIDbContext context)
@@ -23,19 +23,19 @@ namespace HiveAPI.Controllers
         public async Task<IActionResult> GetWorkSpaces()
         {
             var WorkSpaces = await _context.WorkSpaces
-                                                .Include(u => u.User)
-                                                .Select(ws => new {
-                                                    ws.WId,
-                                                    ws.WorkspaceName,
-                                                    ws.WorkspaceDescription,
-                                                    User = new
-                                                    {
-                                                        ws.User.UserId,
-                                                        ws.User.name,
-                                                        ws.User.email
-                                                    }
-                                                })
-                                                .ToListAsync();
+                                            .Include(u => u.User)
+                                            .Select(ws => new {
+                                                ws.WId,
+                                                ws.WorkspaceName,
+                                                ws.WorkspaceDescription,
+                                                User = new
+                                                {
+                                                    ws.User.UserId,
+                                                    ws.User.name,
+                                                    ws.User.email
+                                                }
+                                            })
+                                            .ToListAsync();
 
             return Ok(WorkSpaces);
         }
@@ -45,19 +45,19 @@ namespace HiveAPI.Controllers
         public async Task<IActionResult> GetWorkSpaceById(int id)
         {
             var WorkSpace = await _context.WorkSpaces
-                                                .Include(u => u.User)
-                                                .Select(ws => new {
-                                                    ws.WId,
-                                                    ws.WorkspaceName,
-                                                    ws.WorkspaceDescription,
-                                                    User = new
-                                                    {
-                                                        ws.User.UserId,
-                                                        ws.User.name,
-                                                        ws.User.email
-                                                    }
-                                                })
-                                                .FirstOrDefaultAsync(x => x.WId == id);
+                                            .Include(u => u.User)
+                                            .Select(ws => new {
+                                                ws.WId,
+                                                ws.WorkspaceName,
+                                                ws.WorkspaceDescription,
+                                                User = new
+                                                {
+                                                    ws.User.UserId,
+                                                    ws.User.name,
+                                                    ws.User.email
+                                                }
+                                            })
+                                            .FirstOrDefaultAsync(x => x.WId == id);
 
             if (WorkSpace == null)
             {
@@ -99,7 +99,6 @@ namespace HiveAPI.Controllers
         [Authorize]
         public async Task<IActionResult> AddWorkSpace(WorkSpace workSpace)
         {
-
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == workSpace.UserId);
 
             if (user == null)
@@ -120,14 +119,15 @@ namespace HiveAPI.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateWorkSpace(int id, WorkSpace workSpace)
         {
-            var WorkSpace = await _context.WorkSpaces.FirstOrDefaultAsync(x => x.WId == id);
+            var existingWorkSpace = await _context.WorkSpaces.FirstOrDefaultAsync(x => x.WId == id);
 
-            if (WorkSpace == null)
+            if (existingWorkSpace == null)
             {
                 return NotFound();
             }
 
-            _context.Entry(WorkSpace).CurrentValues.SetValues(workSpace);
+            existingWorkSpace.WorkspaceName = workSpace.WorkspaceName;
+            existingWorkSpace.WorkspaceDescription = workSpace.WorkspaceDescription;
 
             try
             {
@@ -138,7 +138,6 @@ namespace HiveAPI.Controllers
             {
                 throw;
             }
-
         }
 
         [HttpDelete("{id}", Name = "DeleteWorkSpace")]
@@ -157,7 +156,5 @@ namespace HiveAPI.Controllers
 
             return Ok(WorkSpace);
         }
-
-
     }
 }
