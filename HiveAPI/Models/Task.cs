@@ -7,14 +7,10 @@
         public string? TaskDescription { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string? Label { get; set; }
+        public Priority priority { get; set; }
 
-
-        // Lidhja me Collaborator
-        public ICollection<Collaborator> Collaborators { get; set; }
-
-        // Lidhja me Workspace
+        // Lidhja me List
         public int ListId { get; set; }
-        public List list{ get; set; }
+        public List List { get; set; }
     }
 }

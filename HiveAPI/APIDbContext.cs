@@ -16,7 +16,11 @@ namespace HiveAPI
 
         public DbSet<Collaborator> Collaborators { get; set; }
 
+        public DbSet<List> Lists { get; set; }
+
         public DbSet<Models.Task> Tasks { get; set; }
+
+        public DbSet<TaskComment> TaskComments { get; set; }
     }
 
 

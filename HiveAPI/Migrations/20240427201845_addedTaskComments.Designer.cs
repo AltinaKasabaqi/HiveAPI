@@ -4,6 +4,7 @@ using HiveAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiveAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240427201845_addedTaskComments")]
+    partial class addedTaskComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,30 +124,6 @@ namespace HiveAPI.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("HiveAPI.Models.TaskComment", b =>
-                {
-                    b.Property<int>("TaskCommentsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskCommentsId"));
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TaskCommentsId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("TaskComments");
-                });
-
             modelBuilder.Entity("HiveAPI.Models.WorkSpace", b =>
                 {
                     b.Property<int>("WId")
@@ -200,17 +179,6 @@ namespace HiveAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("List");
-                });
-
-            modelBuilder.Entity("HiveAPI.Models.TaskComment", b =>
-                {
-                    b.HasOne("HiveAPI.Models.Task", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("HiveAPI.Models.WorkSpace", b =>
