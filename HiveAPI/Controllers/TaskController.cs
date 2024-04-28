@@ -76,7 +76,22 @@ namespace HiveAPI.Controllers
             return Ok(tasks);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/move/{newListId}")]
+        [Authorize]
+        public async Task<IActionResult> MoveTask(int id, int newListId)
+        {
+            try
+            {
+                await _taskService.MoveTask(id, newListId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        /*[HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] Models.Task task)
         {
@@ -89,7 +104,7 @@ namespace HiveAPI.Controllers
             {
                 return NotFound(ex.Message);
             }
-        }
+        }*/
 
         /*[HttpGet(Name = "GetTasks")]
         [Authorize]

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using HiveAPI.Models;
+using Task = HiveAPI.Models.Task;
 namespace HiveAPI.Services.TaskServices
 {
     public class TaskService : ITaskService
@@ -85,6 +86,27 @@ namespace HiveAPI.Services.TaskServices
             
                 await _context.SaveChangesAsync();
            
+        }
+
+        public async System.Threading.Tasks.Task MoveTask(int id, int newListId)
+        {
+            var existingTask = await _context.Tasks.FindAsync(id);
+
+            if (existingTask == null)
+            {
+                throw new ArgumentException("Task not found");
+            }
+
+            existingTask.ListId = newListId;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
     }
 }

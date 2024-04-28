@@ -8,5 +8,6 @@
         System.Threading.Tasks.Task UpdateTask(int id, Models.Task task);
         System.Threading.Tasks.Task DeleteTask(int id);
         Task<IEnumerable<Models.Task>> GetTasksByListId(int listId);
+        System.Threading.Tasks.Task MoveTask(int id, int newListId);
     }
 }
