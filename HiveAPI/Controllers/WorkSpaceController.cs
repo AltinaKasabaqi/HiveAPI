@@ -1,4 +1,5 @@
 ﻿using HiveAPI.Models;
+using HiveAPI.Services.WorkSpaceServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +12,87 @@ namespace HiveAPI.Controllers
     public class WorkSpacesController : ControllerBase
     {
 
-        private readonly APIDbContext _context;
+        private readonly IWorksService _worksService;
 
-        public WorkSpacesController(APIDbContext context)
+        public WorkSpacesController(IWorksService worksService)
         {
-            _context = context;
+            _worksService = worksService;
         }
 
-        [HttpGet(Name = "GetWorkSpaces")]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateWorkSpace([FromBody] WorkSpace ws)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+           
+                var workspaceId = await _worksService.CreateWorkSpace(ws);
+                return Ok(workspaceId);
+            
+
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteWorkSpace(int id)
+        {
+            
+                await _worksService.DeleteWorkSpace(id);
+                return Ok("Workspace deleted successfully.");
+           
+              
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetWorkSpaceById(int id)
+        {
+            
+                var workspace = await _worksService.GetWorkSpaceById(id);
+                if (workspace == null)
+                {
+                    return NotFound();
+                }
+                return Ok(workspace);
+            
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetWorkSpaces()
+        {
+           
+                var workspaces = await _worksService.GetWorkSpaces();
+                return Ok(workspaces);
+            
+              
+        }
+
+        [HttpGet("user/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetWorkSpacesByUserId(int id)
+        {
+            
+                var workspaces = await _worksService.GetWorkSpacesByUserId(id);
+                return Ok(workspaces);
+            
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateWorkSpace(int id, WorkSpace workSpace)
+        {
+            
+                await _worksService.UpdateWorkSpace(id, workSpace);
+                return Ok("Workspace updated successfully.");
+            
+            
+        }
+
+        /*[HttpGet(Name = "GetWorkSpaces")]
         [Authorize]
         public async Task<IActionResult> GetWorkSpaces()
         {
@@ -157,7 +231,7 @@ namespace HiveAPI.Controllers
 
             return Ok(WorkSpace);
         }
-
+        */
 
     }
 }

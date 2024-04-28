@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using HiveAPI.Services;
+using HiveAPI.Services.ListServices;
+using HiveAPI.Services.WorkSpaceServices;
+using HiveAPI.Services.TaskServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +18,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IListService, ListService>();
+builder.Services.AddScoped<IWorksService, WorksService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddDbContext<APIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("APIDbConnection"));

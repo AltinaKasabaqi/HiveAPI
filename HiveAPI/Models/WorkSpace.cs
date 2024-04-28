@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HiveAPI.Models
 {
+    [Table ("WorkSpaces")]
     public class WorkSpace
     {
 
