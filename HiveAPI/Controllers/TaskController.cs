@@ -92,6 +92,30 @@ namespace HiveAPI.Controllers
             }
         }
 
+        [HttpPut("{id}/move")]
+        [Authorize]
+        public async Task<IActionResult> MoveTask(int id, [FromBody] int newListId)
+        {
+            var existingTask = await _context.Tasks.FindAsync(id);
+
+            if (existingTask == null)
+            {
+                return NotFound();
+            }
+
+            existingTask.ListId = newListId; 
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(existingTask);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
+
         [HttpDelete("{id}", Name = "DeleteTask")]
         [Authorize]
         public async Task<IActionResult> DeleteTask(int id)
