@@ -8,6 +8,7 @@ using System.Text;
 using HiveAPI.Services;
 using HiveAPI.Services.ListServices;
 using HiveAPI.Services.WorkSpaceServices;
+using HiveAPI.Services.TaskServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IWorksService, WorksService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddDbContext<APIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("APIDbConnection"));

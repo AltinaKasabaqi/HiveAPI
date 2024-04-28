@@ -6,39 +6,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HiveAPI.Services.WorkSpaceServices;
+using HiveAPI.Models;
 
 namespace TestProject
 {
     public class WorkSpaceTests
     {
 
-        private readonly Mock<WorkSpacesController> _workSpaceController;
-        private readonly Mock<APIDbContext> _context;
+        private readonly Mock<WorksService> workSpaceServiceMock;
 
         public WorkSpaceTests()
         {
-            _workSpaceController = new Mock<WorkSpacesController>();
-            _context = new Mock<APIDbContext>();
+            workSpaceServiceMock = new Mock<WorksService>();
 
         }
+
         [Fact]
-        public void GetUserReturnsUserWhenUserExists()
-        {
-            // Arrange
-            var mockController = new Mock<WorkSpacesController>();
-            //var existingUser = new User { UserId = 1, name = "John", email = "john@example.com" };
-            //mockController.Setup(c => c.Create(existingUser));
+        public async  System.Threading.Tasks.Task GetWorkSpaceTest() { 
+            var mockWorkSpaces = GetFakeWorkSpaces();
 
-            var result = mockController.Setup(c => c.GetWorkSpaces());
+            workSpaceServiceMock.Setup(x => x.GetWorkSpaces()).Returns(mockWorkSpaces);
+            var workSpaceController = new WorkSpacesController(workSpaceServiceMock.Object);
 
-            //var controller = new UserController(null, mockController.Object);
+            var result = await workSpaceController.GetWorkSpaces();
 
-            // Act
-
-
-            // Assert
-            Assert.NotEmpty(result);
+            Assert.NotNull(result);
+            
         }
+
+        public static List<WorkSpace> GetFakeWorkSpaces()
+        {
+            var workSpaces = new List<WorkSpace>()
+            {
+                new()
+                {
+                    WorkspaceName = "Test",
+                    WorkspaceDescription = "Test"
+                }
+            };
+            return workSpaces;
+        }
+
+       
 
     }
 }*/

@@ -1,4 +1,5 @@
 ﻿using HiveAPI.Models;
+using HiveAPI.Services.TaskServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +11,87 @@ namespace HiveAPI.Controllers
     [Route("/task")]
     public class TaskController : Controller
     {
-        private readonly APIDbContext _context;
+        private readonly ITaskService _taskService;
 
-        public TaskController(APIDbContext context)
+        public TaskController(ITaskService taskService)
         {
-            _context = context;
+            _taskService = taskService;
         }
 
-        [HttpGet(Name = "GetTasks")]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddTask([FromBody] Models.Task task)
+        {
+            try
+            {
+                var taskId = await _taskService.AddTask(task);
+                return Ok(taskId);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            try
+            {
+                await _taskService.DeleteTask(id);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllTasks()
+        {
+            var tasks = await _taskService.GetAllTasks();
+            return Ok(tasks);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetTaskById(int id)
+        {
+            var task = await _taskService.GetTaskById(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return Ok(task);
+        }
+
+        [HttpGet("list/{listId}")]
+        [Authorize]
+        public async Task<IActionResult> GetTasksByListId(int listId)
+        {
+            var tasks = await _taskService.GetTasksByListId(listId);
+            return Ok(tasks);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] Models.Task task)
+        {
+            try
+            {
+                await _taskService.UpdateTask(id, task);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        /*[HttpGet(Name = "GetTasks")]
         [Authorize]
         public async Task<IActionResult> GetTasks()
         {
@@ -124,6 +198,6 @@ namespace HiveAPI.Controllers
             }
 
             return Ok(task);
-        }
+        }*/
     }
 }

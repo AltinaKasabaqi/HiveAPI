@@ -1,5 +1,8 @@
-﻿namespace HiveAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HiveAPI.Models
 {
+    [Table ("Tasks")]
     public class Task
     {
         public int TaskId { get; set; }
