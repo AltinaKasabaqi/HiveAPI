@@ -91,7 +91,7 @@ namespace HiveAPI.Controllers
             }
         }
 
-        /*[HttpPut("{id}")]
+        [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] Models.Task task)
         {
@@ -104,7 +104,7 @@ namespace HiveAPI.Controllers
             {
                 return NotFound(ex.Message);
             }
-        }*/
+        }
 
         /*[HttpGet(Name = "GetTasks")]
         [Authorize]
