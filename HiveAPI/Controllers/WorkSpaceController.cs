@@ -30,8 +30,7 @@ namespace HiveAPI.Controllers
 
            
                 var workspaceId = await _worksService.CreateWorkSpace(ws);
-                return Ok(workspaceId);
-            
+                return Ok(workspaceId);  
 
         }
 
