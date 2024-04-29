@@ -21,6 +21,8 @@ namespace HiveAPI
         public DbSet<Models.Task> Tasks { get; set; }
 
         public DbSet<TaskComment> TaskComments { get; set; }
+
+        public DbSet<TaskCollab> TaskColls { get; set; }
     }
 
 

@@ -121,6 +121,23 @@ namespace HiveAPI.Migrations
                     b.ToTable("Tasks");
                 });
 
+            modelBuilder.Entity("HiveAPI.Models.TaskCollab", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskColls");
+                });
+
             modelBuilder.Entity("HiveAPI.Models.TaskComment", b =>
                 {
                     b.Property<int>("TaskCommentsId")

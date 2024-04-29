@@ -9,6 +9,7 @@ using HiveAPI.Services;
 using HiveAPI.Services.ListServices;
 using HiveAPI.Services.WorkSpaceServices;
 using HiveAPI.Services.TaskServices;
+using HiveAPI.Services.TaskCollabServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IWorksService, WorksService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder .Services.AddScoped<ITaskCollabService, TaskCollabService>();
 builder.Services.AddDbContext<APIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("APIDbConnection"));

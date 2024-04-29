@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiveAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240428132539_changes")]
-    partial class changes
+    [Migration("20240429070512_AddedTable")]
+    partial class AddedTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,23 @@ namespace HiveAPI.Migrations
                     b.HasIndex("ListId");
 
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("HiveAPI.Models.TaskCollab", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskColls");
                 });
 
             modelBuilder.Entity("HiveAPI.Models.TaskComment", b =>

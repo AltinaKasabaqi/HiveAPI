@@ -15,5 +15,8 @@ namespace HiveAPI.Models
         // Lidhja me List
         public int ListId { get; set; }
         public List List { get; set; }
+
+       
+        
     }
 }
